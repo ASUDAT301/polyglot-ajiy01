@@ -15,7 +15,7 @@ library(shiny)
 shinyUI(fluidPage(
 
     # Application title
-    titlePanel("My First App: 2020-21 NBA Player Stats: Per Game"),
+    titlePanel("My First App - 2020-21 NBA Player Stats: Per Game"),
 
     # Sidebar with a slider input for number of bins
    selectInput(inputId = 'team', label = 'Choose a Team:', 
