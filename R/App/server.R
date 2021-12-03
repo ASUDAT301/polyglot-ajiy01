@@ -7,20 +7,40 @@
 #    http://shiny.rstudio.com/
 #
 
+library(tidyverse)
 library(shiny)
 
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+shinyServer(function(input, output,session) {
+    
+    bb = read.csv("data/bb_data.csv")
+    
+    data <- reactive({
+      req(input$team)
+      df <- bb %>% filter(Tm %in% input$team) %>% group_by(Age) %>% summarise(FG = sum(FG))
     })
-
+    
+    observe({
+      updateSelectInput(session, "team", choices = bb$Tm)
+    })
+    
+    output$Age_FG <- renderPlot({
+      ggplot(data(), aes(y = FG, x=Age)) + geom_bar(stat="sum", color="black", fill="blue") + ggtitle("Average Field Goals by Age")
+    })
+    
+    output$down <- downloadHandler(
+      filename=function(){
+        paste("bbgraph", input$dload, sep=".")
+      }, 
+      content=function(file){
+        if(input$dload == "png")
+          png(file)
+        else if(input$dload == "pdf")
+          pdf(file)
+        else
+          jpeg(file)
+        print(ggplot(data(), aes(y = FG, x=Age)) + geom_bar(stat="sum", color="black", fill="blue") + ggtitle("Average Field Goals by Age"))
+        dev.off()
+      }
+    )
 })
