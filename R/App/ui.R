@@ -7,27 +7,20 @@
 #    http://shiny.rstudio.com/
 #
 
+library (tidyverse)
 library(shiny)
+
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel("My First App"),
 
     # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
-    )
+   selectInput(inputId = 'team', label = 'Choose a Team:', 
+               "Team"),
+   radioButtons(inputId = 'dload', label="Save Graph as", choices=list("png", "pdf", "jpeg")),
+   mainPanel(plotOutput('Age_FG'), 
+             downloadButton(outputId = "down", label="Download Graph"))
 ))
