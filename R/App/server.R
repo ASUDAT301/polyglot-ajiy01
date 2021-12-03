@@ -43,7 +43,7 @@ shinyServer(function(input, output,session) {
           pdf(file)
         else
           jpeg(file)
-        print(ggplot(data(), aes(y = FG, x=Age)) + geom_bar(stat="sum", color="black", fill="blue") + ggtitle("Average Field Goals by Age"))
+        print(ggplot(data(), aes(y = FG, x=Age)) +geom_bar(stat="sum", color="black", fill="blue") + ggtitle("Average Field Goals by Age"))
         dev.off()
       }
     )
